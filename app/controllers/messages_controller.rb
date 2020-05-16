@@ -7,7 +7,6 @@ class MessagesController < ApplicationController
     end
 
     def create 
-        byebug;
         message = Message.create(message_params)
         render json: message
     end
