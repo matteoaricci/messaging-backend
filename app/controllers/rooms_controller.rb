@@ -10,6 +10,14 @@ class RoomsController < ApplicationController
         render json: room
     end
 
+    def room_messages
+        room = Room.find_by(id: params[:id])
+
+        messages = room.messages 
+
+        render json: messages
+    end
+
     private
 
     def room_params
