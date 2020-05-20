@@ -10,9 +10,11 @@ class ForumChannel < ApplicationCable::Channel
     decoded = JWT.decode(data["userId"], secret_key, true, {alg: 'HS256'})
     new_message = Message.create(user_id: decoded[0]['user_id'], room_id: data['roomId'], content: data['text'])
     
-    
-    data['sent_message'] = new_message
-    ActionCable.server.broadcast("chat_#{params[:room]}", data)
+    data["author"] = User.find_by(id: decoded[0]['user_id']).name
+    data['message'] = new_message
+
+    info_to_return = {author: data["author"], message: data['message']}
+    ActionCable.server.broadcast("chat_#{params[:room]}", info_to_return)
   end
 
   def unsubscribed

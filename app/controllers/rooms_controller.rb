@@ -13,9 +13,10 @@ class RoomsController < ApplicationController
     def room_messages
         room = Room.find_by(id: params[:id])
 
-        messages = room.messages 
+        messages = Message.where(room_id: params[:id])
 
-        render json: messages
+        chat_history = messages.map {|message| {author: User.find(message.user_id).name, message: message} }
+        render json: chat_history
     end
 
     private
